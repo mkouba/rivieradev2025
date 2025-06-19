@@ -31,13 +31,13 @@ Riviera DEV 2025
 
 ---
 
-### Part - Qute history, goals & design
+### Part 1 - Qute history, goals & design
 
 ---
 
 ### What is Qute?
 
-- **QU**(arkus)**TE**(mplating)
+- **QU**arkus **TE**mplating
 - Quarkus extension
 - Introduced in Quarkus [1.1.0.CR1](https://github.com/quarkusio/quarkus/pull/5793), ~ 6 years ago
 
@@ -47,38 +47,75 @@ Riviera DEV 2025
 
 ---
 
-### Templates?
+### Templates you say...
 
 - [~] ✅ The good thing: everybody understands templates
 - [~] ❌ The bad thing: everybody UNDERSTANDS templates
 
 ---
 
-### Original design goals for Qute
+### What's the adoption of Qute?
 
-- Simple syntax
-- Extensibility
-- Build-time validations
-- Friendly to [Quarkus Reactive Architecture](https://quarkus.io/guides/quarkus-reactive-architecture)
-- Friendly to native images
+- [~] We don't know the numbers!
+- [~] But we fixed a number of bugs!
+- [~] ???
 
 ---
 
-### Obvious goals for Qute
+### Original design goals for Qute
 
-- Decent performance
-- First-class Quarkus citizen
-- Integration with other extensions
+- [~] Simple syntax with minimal logic
+- [~] Extensibility
+- [~] Optional build-time validations
+- [~] Friendly to [Quarkus Reactive Architecture](https://quarkus.io/guides/quarkus-reactive-architecture)
+- [~] Friendly to native images
+- [~] Decent performance
+- [~] First-class Quarkus citizen
 
 ---
 
 ### Have we achieved all those goals?
 
-Yes ✅ and no ❌.
+[~] Yes ✅ and no ❌.
 
 ---
 
-### Part - What happens under the hood?
+### What went wrong? #1
+
+- Simple syntax with minimal logic
+- [~] <span class="red">*Too many users requested more powerful syntax with complex logic*</span>
+
+---
+
+### What went wrong? #2
+
+- Extensibility
+- [~] <span class="red">*TODO*</span>
+
+---
+
+### What went wrong? #3
+
+- Optional build-time validations
+- [~] <span class="red">*TODO*</span>
+
+---
+
+### What went wrong? #4
+
+- Friendly to [Quarkus Reactive Architecture](https://quarkus.io/guides/quarkus-reactive-architecture) VS Decent performance
+- [~] <span class="red">*TODO*</span>
+
+---
+
+### What went wrong? #5
+
+- Friendly to native images
+- [~] <span class="red">*TODO*</span>
+
+---
+
+### Part 2 - What happens under the hood?
 
 ---
 
