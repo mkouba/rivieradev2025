@@ -72,6 +72,9 @@ Riviera DEV 2025
 - [~] Decent performance
 - [~] First-class Quarkus citizen
 
+<!--
+You don't want to fall into the trap of benchmark-driven development.
+ -->
 ---
 
 ### Have we achieved all those goals?

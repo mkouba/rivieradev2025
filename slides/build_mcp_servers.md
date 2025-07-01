@@ -17,7 +17,7 @@ Riviera DEV 2025
 - [~] Introvert
 - [~] Fan of open source, not only in software
 - [~] Software engineer at Ret Hat/IBM
-- [~] Quarkus MCP server contributor
+- [~] Quarkus MCP server contributor/maintainer
 
 ---
 
@@ -100,8 +100,8 @@ Riviera DEV 2025
 
 ### Goals
 
-- [~] Unified declarative and programmatic API
-- [~] To implement MCP server features (tools, prompts and resources)
+- [~] Unified declarative and programmatic API...
+- [~] ...to implement MCP server features (tools, prompts and resources)
 - [~] Independent of the selected transport
 
 ---
@@ -110,7 +110,7 @@ Riviera DEV 2025
 
 - [~] The `stdio` transport ✅
 - [~] Both variants of the `http` transport ✅
-- [~] "Resumability and Redelivery" for the Streamable HTTP is not supported yet ❌
+  - [~] "Resumability and Redelivery" for the Streamable HTTP is not supported yet ❌
 
 ---
 
@@ -131,7 +131,7 @@ Riviera DEV 2025
 import io.quarkiverse.mcp.server.Tool;
 import io.quarkiverse.mcp.server.ToolArg;
 
-public class McpFeatures {
+public class Tools {
 
    @Tool(description = """
          Answer the ultimate question to tabs vs. spaces
@@ -139,7 +139,7 @@ public class McpFeatures {
    String answer(
            @ToolArg(description = "The programming language")
            String lang) {
-      if ("python".equals(lang)) {
+      if ("python".equalsIgnoreCase(lang)) {
         return "Tabs are better for indentation.";
       }
       return "Spaces are better for indentation.";
@@ -169,7 +169,7 @@ import io.quarkiverse.mcp.server.Tool;
 import io.quarkiverse.mcp.server.ToolArg;
 import io.smallrye.mutiny.Uni;
 
-public class McpFeatures {
+public class Tools {
 
    @Tool(description = """
          Answer the ultimate question to tabs vs. spaces
@@ -177,7 +177,7 @@ public class McpFeatures {
    Uni<String> answer(
                 @ToolArg(description = "The programming language")
                 String lang) {
-      if ("python".equals(lang)) {
+      if ("python".equalsIgnoreCase(lang)) {
         return Uni.createFrom().item("Tabs are better for indentation.");
       }
       return Uni.createFrom().item("Spaces are better for indentation.");
@@ -190,19 +190,19 @@ public class McpFeatures {
 ### Programmatic API in action
 
 ```java[1: 1-15|3-4|7-18]
-public class McpFeatures {
+public class Tools {
 
     @Inject
     ToolManager toolManager; 
 
     @Startup 
     void addTools() {
-       toolManager.newTool("answer") 
+       toolManager.newTool("theAnswer") 
           .setDescription("Answer the ultimate question to tabs vs. spaces")
           .addArgument("lang", "The programming language", true, String.class)
           .setHandler(
              toolArgs -> {
-                if ("python".equals(toolArgs.args().get("lang").toString())) {
+                if ("python".equalsIgnoreCase(toolArgs.args().get("lang").toString())) {
                    return ToolResponse.success("Tabs are better for indentation.");
                 }
                 return ToolResponse.success("Spaces are better for indentation.");
@@ -221,6 +221,7 @@ public class McpFeatures {
 
 ### Traffic logging
 
+- Transport-agnostic
 - Log all JSON messages sent/received
 
 ```properties
@@ -232,45 +233,149 @@ quarkus.mcp.server.traffic-logging.text-limit=1500
 
 ### Dev UI
 
-TODO add image
+![MCP Dev UI](deck-assets/mcp-devui.png)
 
 ---
 
 ### Client logging 
 
-- [~] Feature methods can accept `io.quarkiverse.mcp.server.McpLog` param
-- [~] A utility class that can send log message notifications to a connected MCP client
-- [~] There are also convenient methods that log the message first (using JBoss Logging) and afterwards send a notification
+```java[1: 1-15|8-10]
+public class Tools {
 
----
-
-### Progress API
-
-TODO
-
----
-
-### Sampling
-
-TODO
+    @Tool(description = """
+            Answer the ultimate question to tabs vs. spaces
+            """)
+    String theAnswer(
+            @ToolArg(description = "The programming language", defaultValue = "Java") String lang,
+            McpLog log) {
+        log.info("Let's try to answer the question for lang: %s",
+           lang);
+        if ("python".equalsIgnoreCase(lang)) {
+            return "Tabs are better for indentation.";
+        }
+        return "Spaces are better for indentation.";
+    }
+}
+```
 
 ---
 
 ### Initial checks
 
-TODO
+```java[1: 1-12|5|7-11]
+import io.quarkiverse.mcp.server.InitialCheck;
+import io.quarkiverse.mcp.server.InitialCheck.CheckResult;
+import io.quarkiverse.mcp.server.InitialRequest;
+
+public class SamplingCheck implements InitialCheck {
+
+   public Uni<CheckResult> perform(InitialRequest initialRequest) {
+      return initialRequest.supportsSampling()
+               ? CheckResult.successs()
+               : CheckResult.error("Sampling not supported");
+   }
+}
+```
 
 ---
 
-### Filters
+### Progress API
 
-TODO
+```java[1: 1-32|6-18|11-15|26|28-29]
+public class LongRunningTools {
+
+    @Inject
+    ExecutorService executor;
+
+    @Tool
+    Uni<String> longRunning(Progress progress) {
+        if (progress.token().isEmpty()) {
+            return Uni.createFrom().item("Client does not support progress notifications!");
+        }
+        ProgressTracker tracker = progress.trackerBuilder()
+                .setDefaultStep(1)
+                .setTotal(10)
+                .setMessageBuilder(i -> "Long running progress: " + i)
+                .build();
+
+        CompletableFuture<String> ret = new CompletableFuture<String>();
+        executor.execute(() -> {
+            for (int i = 0; i < 10; i++) {
+                try {
+                    // Do something that takes time...
+                    TimeUnit.MILLISECONDS.sleep(500);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+                tracker.advanceAndForget();
+            }
+            // Finish the tool call
+            ret.complete("ok");
+        });
+        return Uni.createFrom().completionStage(ret);
+    }
+}
+```
 
 ---
 
-### Multiple server configurations
+### Sampling
 
-TODO
+```java[1: 1-15|4|5-14|16]
+public class Tools {
+
+    @Tool(description = "Just test the sampling feature")
+    Uni<String> justTestSampling(Sampling sampling, String topic) {
+        if (sampling.isSupported()) {
+            SamplingRequest samplingRequest = sampling.requestBuilder()
+                    .setMaxTokens(100)
+                    .addMessage(
+                       SamplingMessage.withUserRole(
+                          "Tell me more about " + topic))
+                    .build();
+            return samplingRequest
+               .send()
+               .map(response -> response.content().asText().text());
+        } else {
+           throw new ToolCallException("Sampling not supported");
+        }
+    }
+}
+```
+
+---
+
+### Testing!
+
+```java[1: 1-22|9-13|15-19|15-24]
+@QuarkusTest
+public class ToolsAnswerTest {
+
+    @TestHTTPResource
+    URI testUri;
+
+    @Test
+    public void testAnswer() {
+        McpStremableTestClient client = McpAssured
+                .newStreamableClient()
+                .setBaseUri(testUri)
+                .build()
+                .connect();
+
+        client.when()
+                .toolsCall("theAnswer", Map.of("lang", "Java"), r -> {
+                    assertEquals("Spaces are better for indentation.", 
+                       r.content().get(0).asText().text());
+                })
+                .toolsCall("theAnswer", Map.of("lang", "python"), r -> {
+                    assertEquals("Tabs are better for indentation.", 
+                       r.content().get(0).asText().text());
+                })
+                .thenAssertResults();
+    }
+
+}
+```
 
 ---
 
@@ -278,7 +383,7 @@ TODO
 
 - [~] Improve the testing story
 - [~] WebSocket transport
-- [~] Add JSON schema validation
+- [~] Security
 
 ---
 
