@@ -8,7 +8,7 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 import io.quarkiverse.mcp.server.test.McpAssured;
-import io.quarkiverse.mcp.server.test.McpAssured.McpStremableTestClient;
+import io.quarkiverse.mcp.server.test.McpAssured.McpStreamableTestClient;
 import io.quarkus.test.common.http.TestHTTPResource;
 import io.quarkus.test.junit.QuarkusTest;
 
@@ -20,7 +20,7 @@ public class ToolsAnswerTest {
 
     @Test
     public void testAnswer() {
-        McpStremableTestClient client = McpAssured
+        McpStreamableTestClient client = McpAssured
                 .newStreamableClient()
                 .setBaseUri(testUri)
                 .build()
