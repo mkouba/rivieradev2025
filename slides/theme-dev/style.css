@@ -38,6 +38,13 @@ span.red {
    color: red;
 }
 
+span.demo {
+  background-color: #d33682;
+  color: white;
+  font-size: 0.3em;
+  padding: 3px;
+  border-radius: 4px;
+}
 
 /*!
   Theme: GitHub Dark

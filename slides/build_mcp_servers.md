@@ -14,8 +14,7 @@ Riviera DEV 2025
 
 ### Who is Martin?
 
-- [~] Introvert
-- [~] Fan of open source, not only in software
+- [~] Introvert and fan of open source
 - [~] Software engineer at Ret Hat/IBM
 - [~] Quarkus MCP server contributor/maintainer
 
@@ -30,6 +29,15 @@ Riviera DEV 2025
 - [~] Quarkus MCP.Next?
 
 ---
+
+### Slides and examples
+
+![GitHub repo link](deck-assets/qr.png)
+
+<span class="demo" style="font-size:1.1em;">👀 EXAMPLE</span> ➵ https://github.com/mkouba/rivieradev2025
+
+---
+
 
 ### Part 1 - MCP
 
@@ -81,7 +89,7 @@ Riviera DEV 2025
 
 ### MCP summary
 
-[~] ➵➵➵ Wild West ➵➵➵
+[~] ➵➵➵➵➵ Wild West
 
 ---
 
@@ -101,8 +109,8 @@ Riviera DEV 2025
 ### Goals
 
 - [~] Unified declarative and programmatic API...
-- [~] ...to implement MCP server features (tools, prompts and resources)
-- [~] Independent of the selected transport
+- [~] ...to implement MCP server features (tools, prompts and resources)...
+- [~] ...independent of the selected transport.
 
 ---
 
@@ -110,14 +118,15 @@ Riviera DEV 2025
 
 - [~] The `stdio` transport ✅
 - [~] Both variants of the `http` transport ✅
-  - [~] "Resumability and Redelivery" for the Streamable HTTP is not supported yet ❌
+  - [~] "Resumability and Redelivery" for the Streamable HTTP not supported yet ❌
+  - [~] "Subsidiary SSE stream" for the Streamable HTTP not supported yet ❌
 
 ---
 
 ### Design
 
-- [~] Declarative API ➵ annotated business methods of CDI beans
-- [~] Programmatic API ➵ `@Inject` manager CDI beans and use fluent API to register a feature
+- [~] Declarative API ➵ annotate business methods of CDI beans
+- [~] Programmatic API ➵ `@Inject` manager CDI beans and use a fluent API to register a feature
 
 ---
 
@@ -125,7 +134,7 @@ Riviera DEV 2025
 
 ---
 
-### Declarative API in action
+### Declarative API in action <span class="demo">👀 EXAMPLE</span>
 
 ```java[1: 1-15|6-8|9-11|12-15]
 import io.quarkiverse.mcp.server.Tool;
@@ -214,12 +223,13 @@ public class Tools {
 
 ---
 
-### Part 4 - More advanced features
+### Part 4 - Advanced features
+(a small part)
 
 ---
 
 
-### Traffic logging
+### Traffic logging <span class="demo">👀 EXAMPLE</span>
 
 - Transport-agnostic
 - Log all JSON messages sent/received
@@ -231,13 +241,13 @@ quarkus.mcp.server.traffic-logging.text-limit=1500
 
 ---
 
-### Dev UI
+### Dev UI <span class="demo">👀 EXAMPLE</span>
 
 ![MCP Dev UI](deck-assets/mcp-devui.png)
 
 ---
 
-### Client logging 
+### Client logging <span class="demo">👀 EXAMPLE</span>
 
 ```java[1: 1-15|8-10]
 public class Tools {
@@ -279,7 +289,7 @@ public class SamplingCheck implements InitialCheck {
 
 ---
 
-### Progress API
+### Progress API <span class="demo">👀 EXAMPLE</span>
 
 ```java[1: 1-32|6-18|11-15|26|28-29]
 public class LongRunningTools {
@@ -319,7 +329,7 @@ public class LongRunningTools {
 
 ---
 
-### Sampling
+### Sampling <span class="demo">👀 EXAMPLE</span>
 
 ```java[1: 1-15|4|5-14|16]
 public class Tools {
@@ -345,7 +355,7 @@ public class Tools {
 
 ---
 
-### Testing!
+### Testing! <span class="demo">👀 EXAMPLE</span>
 
 ```java[1: 1-22|9-13|15-19|15-24]
 @QuarkusTest
@@ -381,18 +391,16 @@ public class ToolsAnswerTest {
 
 ### Part 5 - Quarkus MCP.Next
 
-- [~] Improve the testing story
+- [~] ~~Improve the testing story~~
 - [~] WebSocket transport
 - [~] Security
 
 ---
 
-### And that's all
+### And that's all!
+
+![GitHub repo link](deck-assets/qr.png)
+
+https://github.com/mkouba/rivieradev2025
 
 Thank you!
-
----
-
-
-
-

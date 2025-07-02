@@ -14,10 +14,9 @@ Riviera DEV 2025
 
 ### Who is Martin?
 
-- [~] Introvert
-- [~] Fan of open source, not only in software
+- [~] Introvert and fan of open source
 - [~] Software engineer at Ret Hat/IBM
-- [~] Quarkus core contributor
+- [~] Quarkus Qute contributor/maintainer
 
 ---
 
@@ -31,6 +30,14 @@ Riviera DEV 2025
 
 ---
 
+### Slides and examples
+
+![GitHub repo link](deck-assets/qr.png)
+
+<span class="demo" style="font-size:1.1em;">👀 EXAMPLE</span> ➵ https://github.com/mkouba/rivieradev2025
+
+---
+
 ### Part 1 - Qute history, goals & design
 
 ---
@@ -38,12 +45,8 @@ Riviera DEV 2025
 ### What is Qute?
 
 - **QU**arkus **TE**mplating
-- Quarkus extension
+- Quarkus core extension
 - Introduced in Quarkus [1.1.0.CR1](https://github.com/quarkusio/quarkus/pull/5793), ~ 6 years ago
-
----
-
-![How templates work](deck-assets/templating.png)
 
 ---
 
@@ -56,9 +59,8 @@ Riviera DEV 2025
 
 ### What's the adoption of Qute?
 
-- [~] We don't know the numbers!
-- [~] But we fixed a number of bugs!
-- [~] ???
+- [~] We don't know the exact numbers,
+- [~] but we fixed a number of bugs and implemented a bunch of feature requests!
 
 ---
 
@@ -66,7 +68,7 @@ Riviera DEV 2025
 
 - [~] Simple syntax with minimal logic
 - [~] Extensibility
-- [~] Optional build-time validations
+- [~] Build-time validations (Optional)
 - [~] Friendly to [Quarkus Reactive Architecture](https://quarkus.io/guides/quarkus-reactive-architecture)
 - [~] Friendly to native images
 - [~] Decent performance
@@ -83,31 +85,31 @@ You don't want to fall into the trap of benchmark-driven development.
 
 ---
 
-### What went wrong? #1
+### What went wrong? #B
 
 - Simple syntax with minimal logic
-- [~] <span class="red">*Too many users requested more powerful syntax with complex logic*</span>
+- [~] <span class="red">*Too many users requested more powerful syntax with more complex logic*</span>
 
 ---
 
 ### What went wrong? #2
 
 - Extensibility
-- [~] <span class="red">*TODO*</span>
+- [~] <span class="red">*Extensibility is essential but it often goes against performance optimizations*</span>
 
 ---
 
 ### What went wrong? #3
 
-- Optional build-time validations
-- [~] <span class="red">*TODO*</span>
+- Build-time validations (Optional)
+- [~] <span class="red">*Build-time validations = killer feature, but they're not always practical*</span>
 
 ---
 
 ### What went wrong? #4
 
-- Friendly to [Quarkus Reactive Architecture](https://quarkus.io/guides/quarkus-reactive-architecture) VS Decent performance
-- [~] <span class="red">*TODO*</span>
+- Friendly to [Quarkus Reactive Architecture](https://quarkus.io/guides/quarkus-reactive-architecture)
+- [~] <span class="red">*Reactive means more complex code and sometimes goes against decent performance*</span>
 
 ---
 
@@ -346,15 +348,22 @@ public class Extensions {
 
 ### Part - Integration
 
+- [~] Quarkus mailer extension
+- [~] Renarde
+- [~] Roq
+
 ---
 
 ### Part - Qute.NEXT
 
 ---
 
+### That's all folks
 
-### That's all folks. Questions?
+![GitHub repo link](deck-assets/qr.png)
 
-Thanks you!
+https://github.com/mkouba/rivieradev2025
+
+Thank you!
 
 ---
