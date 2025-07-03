@@ -116,7 +116,7 @@ You don't want to fall into the trap of benchmark-driven development.
 ### What went wrong? #5
 
 - Friendly to native images
-- [~] <span class="red">*TODO*</span>
+- [~] <span class="red">*We had to add a reflection fallback that breaks native images.*</span>
 
 ---
 
