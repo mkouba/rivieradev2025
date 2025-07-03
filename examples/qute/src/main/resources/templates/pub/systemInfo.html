@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <title>System info - Riviera DEV 2025</title>
+   {#bundle /}
+</head>
+<body>
+   <h1>System info - Riviera DEV 2025</h1>
+
+   <div class="uptime" 
+      hx-get="/systemInfo?frag=uptime" 
+      hx-trigger="every 2s">
+      {#fragment id=uptime}
+      Up-time: {cdi:system.upTime.seconds} s
+      {/fragment}
+    </div>
+   </p>
+</body>
+</html>

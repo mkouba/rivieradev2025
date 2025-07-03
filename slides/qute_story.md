@@ -23,9 +23,8 @@ Riviera DEV 2025
 ### What's the plan for today?
 
 - [~] Qute history, goals & design
-- [~] What happens under the hood?
-- [~] Extensibility use case - template extension methods
-- [~] Integration use cases
+- [~] Hello example - what happens under the hood?
+- [~] Fragments & HTMX example
 - [~] Qute.next?
 
 ---
@@ -61,10 +60,11 @@ Riviera DEV 2025
 
 - [~] We don't know the exact numbers,
 - [~] but we fixed a number of bugs and implemented a bunch of feature requests!
+- [~] 37 open issues, 328 closed issues
 
 ---
 
-### Original design goals for Qute
+### Original high-level goals
 
 - [~] Simple syntax with minimal logic
 - [~] Extensibility
@@ -85,7 +85,7 @@ You don't want to fall into the trap of benchmark-driven development.
 
 ---
 
-### What went wrong? #B
+### What went wrong? #1
 
 - Simple syntax with minimal logic
 - [~] <span class="red">*Too many users requested more powerful syntax with more complex logic*</span>
@@ -102,7 +102,7 @@ You don't want to fall into the trap of benchmark-driven development.
 ### What went wrong? #3
 
 - Build-time validations (Optional)
-- [~] <span class="red">*Build-time validations = killer feature, but they're not always practical*</span>
+- [~] <span class="red">*Build-time validations = killer feature, but they're hard to implement and not always 100%*</span>
 
 ---
 
@@ -127,20 +127,21 @@ You don't want to fall into the trap of benchmark-driven development.
 
 ### What happens under the hood?
 
-1. Build time - analyse, validate, generate
-2. Runtime - initialize, parse, watch
+1. **BUILD** - analyse, validate, generate
+2. **RUNTIME** - initialize, parse, watch
 
 ---
 
 
-### Template hello.html
+### Template hello.html <span class="demo">👀 EXAMPLE</span>
 
-```html[1: 1-15|6|8-10|13]
+```html[1: 1-16|7|9-11|14]
 <html>
 <head>
-   <title>Hello Riviera DEV 2025</title>
+   <title>Hello - Riviera DEV 2025</title>
 </head>
 <body>
+   <h1>Hello - Riviera DEV 2025</h1>
    <p>Hello {name ?: "Jean"}!</p>
    <ul>
    {#for header in headers.sorted.reversed}
@@ -148,14 +149,14 @@ You don't want to fall into the trap of benchmark-driven development.
    {/for}
    </ul>
    <hr>
-   Uptime: {cdi:upTime.seconds} s
+   Uptime: {cdi:system.upTime.seconds} s
 </body>
 </html>
 ```
 
 ---
 
-### JAX-RS resource
+### JAX-RS resource <span class="demo">👀 EXAMPLE</span>
 
 ```java[1: 1-15|4-5|9-13]
 @Path("/hello")
@@ -177,7 +178,7 @@ public class HelloResource {
 
 ---
 
-### Implied parameter declarations
+### Implied template parameters
 
 - A type-safe template definition implies template parameter declarations:
   - `name` to `java.lang.String`
@@ -192,7 +193,7 @@ public class HelloResource {
 {@java.util.List<String> headers}
 <html>
 <head>
-<title>Hello Riviera DEV 2025</title>
+   <title>Hello - Riviera DEV 2025</title>
 </head>
 <body>
    <p>Hello {name ?: "Jean"}!</p>
@@ -219,23 +220,17 @@ public class HelloResource {
 ### Build - analysis
 
 - find all Qute constructs in the template
-- `{name.toUpperCase ?: "Jean"}`
-- `{#for header in headers.sorted.reversed}`
-- `{header.toLowerCase}`
-- `{/for}` (validation not needed)
-- `{cdi:upTime.seconds}`
+  - `{name ?: "Jean"}`
+  - `{#for header in headers.sorted.reversed}`
+  - `{header.toLowerCase}`
+  - `{/for}` (validation not needed)
+  - `{cdi:system.upTime.seconds}`
 
 ---
 
-### Build - validation #1
+### Build validation - `headers.sorted` <span class="demo">👀 EXAMPLE</span>
 
-- [~] `name.toUpperCase` → is there `toUpperCase` on `String`?
-- [~] ✅ It's there!
----
-
-### Build - validation #2.a
-
-- [~] `headers.sorted` → is there `sorted` on `List` ? 
+- [~] Is there `sorted` on `List` ? 
 - [~] Wait, there is no `sorted` on `List`!
 - [~] ✅ You're right, `headers.sorted` is handled by the template extension method:
    ```java
@@ -249,9 +244,9 @@ public class HelloResource {
 
 ---
 
-### Build - validation #2.b
+### Build validation - `headers.sorted.reversed` <span class="demo">👀 EXAMPLE</span>
 
-- [~] `sorted.reversed` → is there `reversed` on `List`? 
+- [~] Is there `reversed` on `List`? 
 - [~] Wait, there is no `reversed` on `List`!
 - [~] ✅ You're right again, `sorted.reversed` is handled by the template extension method:
    ```java
@@ -270,26 +265,32 @@ public class HelloResource {
    ```
 ---
 
-### Build - validation #3
+### Build validation - `header.toLowerCase`
 
-- [~] `header.toLowerCase` → is there `toLowerCase` on `String`? 
+- [~] Is there `toLowerCase` on `String`? 
 - [~] ✅ It's there!
 - [~] NOTE: `String` was derived from the previous validations of `headers.sorted.reversed`
 ---
 
-### Build - validation #4.a
+### Build validation - `cdi:system`
 
-- [~] `cdi:upTime` → is there a CDI bean with the name `upTime`? 
+- [~] Is there a CDI bean with the name `system`? 
 - [~] ✅ It's there!
 ---
 
-### Build - validation #4.b
+### Build validation - `cdi:system.upTime`
 
-- [~] `upTime.seconds` → is there `seconds` on `Duration`? 
+- [~] Is there `upTime` on `org.acme.System`? 
+- [~] ✅ `upTime()` is there so we're fine!
+---
+
+### Build validation - `cdi:system.upTime.seconds`
+
+- [~] Is there `seconds` on `java.time.Duration`? 
 - [~] ✅ `getSeconds()` is there so we're fine!
 ---
 
-### Build - validations result
+### Build validations results
 
 ⛔ If any of the validations fails then the build fails as well.
 
@@ -297,8 +298,15 @@ public class HelloResource {
 
 ### Build - generating optimized bytecode
 
-- [~] `{name.toUpperCase}` → generate an accessor for `java.lang.String#toUpperCase()`
 - [~] `{header.toLowerCase}` → generate an accessor for `java.lang.String#toLowerCase()`
+- [~] `{cdi:system.upTime.seconds}` → generate an accessor for `org.acme.System#upTime()`
+- [~] etc.
+
+---
+
+### How does it look like?
+
+Let's see...
 
 ---
 
@@ -310,43 +318,35 @@ public class HelloResource {
 
 ---
 
-### Part - Extensibility
+### Part - Template fragments & HTMX example
 
 ---
 
+### Template systemInfo.html <span class="demo">👀 EXAMPLE</span>
 
-### Template extensions methods
-
-- [~] Static helper methods
-- [~] Add computed properties and virtual methods
-
----
-
-### Template extension method example
-
-
-```java[1: 1-16|4|6-9|11-15]
-@TemplateExtension
-public class Extensions {
-
-   record Item(BigDecimal price) {}
-
-   // usage: {item.discountedPrice}
-   static BigDecimal discountedPrice(Item item) {
-      return item.getPrice().multiply(new BigDecimal("0.9"));
-   }
-   
-   // usage: {str:reverse('hello')}
-   @TemplateExtension(namespace = "str")
-   static String reverse(String val) {
-      return new StringBuilder(val).reverse().toString();
-   }
-}
+```html[1: 1-16|4|9-10|11-13]
+<html>
+<head>
+   <title>System info - Riviera DEV 2025</title>
+   {#bundle /}
+</head>
+<body>
+   <h1>System info - Riviera DEV 2025</h1>
+   <div class="uptime" 
+      hx-get="/systemInfo?frag=uptime" 
+      hx-trigger="every 2s">
+      {#fragment id=uptime}
+      Up-time: {cdi:system.upTime.seconds} s
+      {/fragment}
+    </div>
+   </p>
+</body>
+</html>
 ```
 
 ---
 
-### Part - Integration
+### Also powered by Qute...
 
 - [~] Quarkus mailer extension
 - [~] Renarde
@@ -355,6 +355,9 @@ public class Extensions {
 ---
 
 ### Part - Qute.NEXT
+
+- [~] Improve the parser
+- [~] Extend the syntax
 
 ---
 

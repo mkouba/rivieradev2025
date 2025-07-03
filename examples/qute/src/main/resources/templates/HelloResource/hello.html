@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <title>Hello - Riviera DEV 2025</title>
+   {#bundle /}
+</head>
+<body>
+   <h1>Hello - Riviera DEV 2025</h1>
+   <p>Hello {name ?: "Jean"}!</p>
+   <ul>
+   {#for header in headers.sorted.reversed}
+      <li>{header}</li>
+   {/for}
+   </ul>
+   <hr>
+   Uptime: {cdi:system.upTime.seconds} s
+</body>
+</html>

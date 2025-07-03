@@ -125,8 +125,9 @@ Riviera DEV 2025
 
 ### Design
 
-- [~] Declarative API ➵ annotate business methods of CDI beans
-- [~] Programmatic API ➵ `@Inject` manager CDI beans and use a fluent API to register a feature
+- [~] Leverage the CDI programming model
+- [~] Declarative API: annotate business methods of CDI beans
+- [~] Programmatic API: `@Inject` a manager bean and use a fluent API to register a feature
 
 ---
 
@@ -166,7 +167,7 @@ Demo time! Let's use goose!
 
 ### Execution model
 
-- [~] A server feature method may use blocking or non-blocking logic
+- [~] Feature methods may be blocking or non-blocking logic
 - [~] Execution model is determined by the method signature and additional annotations such as `@Blocking`, `@NonBlocking`, `@RunOnVirtualThread` or `@Transactional`
 
 ---
@@ -198,7 +199,7 @@ public class Tools {
 
 ### Programmatic API in action
 
-```java[1: 1-15|3-4|7-18]
+```java[1: 1-15|3-4|6-18]
 public class Tools {
 
     @Inject
@@ -270,6 +271,36 @@ public class Tools {
 
 ---
 
+### Tools - optional arguments and default values
+
+```java[1: 1-23|11-12|18|13-14|15-17]
+import java.util.Optional;
+import io.quarkiverse.mcp.server.Tool;
+import io.quarkiverse.mcp.server.ToolArg;
+
+public class Tools {
+
+   @Tool(description = """
+         Answer the ultimate question to tabs vs. spaces
+         """)
+   String answer(
+           @ToolArg(description = "The programming language")
+           Optional<String> lang,
+           @ToolArg(description = "The age of the programmer", defaultValue = "44")
+           int age) {
+      if (age < 30 ) {
+         throw new ToolCallException("The programmer is too young to care...");
+      }
+      if (lang.isPresent() && "python".equalsIgnoreCase(lang.get())) {
+        return "Tabs are better for indentation.";
+      }
+      return "Spaces are better for indentation.";
+   }
+}
+```
+
+---
+
 ### Initial checks
 
 ```java[1: 1-12|5|7-11]
@@ -291,7 +322,9 @@ public class SamplingCheck implements InitialCheck {
 
 ### Progress API <span class="demo">👀 EXAMPLE</span>
 
-```java[1: 1-32|6-18|11-15|26|28-29]
+```java[1: 1-34|8-12|13-17|28|30-31]
+import io.quarkiverse.mcp.server.Progress;
+
 public class LongRunningTools {
 
     @Inject
@@ -331,7 +364,9 @@ public class LongRunningTools {
 
 ### Sampling <span class="demo">👀 EXAMPLE</span>
 
-```java[1: 1-15|4|5-14|16]
+```java[1: 1-17|6|7-16|18]
+import io.quarkiverse.mcp.server.Sampling;
+
 public class Tools {
 
     @Tool(description = "Just test the sampling feature")
