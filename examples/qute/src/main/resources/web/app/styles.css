@@ -3,7 +3,10 @@ body {
 }
 
 div.uptime {
+    margin-left: 15%;
+    margin-right: 15%;
     font-size: 6em;
+    font-weight: bold;
     background-color: silver;
     border-radius: 5px;
     padding: 1em;

@@ -14,7 +14,8 @@ Riviera DEV 2025
 
 ### Who is Martin?
 
-- [~] Introvert and fan of open source
+- [~] Introvert
+- [~] Fan of open source
 - [~] Software engineer at Ret Hat/IBM
 - [~] Quarkus Qute contributor/maintainer
 
@@ -23,9 +24,8 @@ Riviera DEV 2025
 ### What's the plan for today?
 
 - [~] Qute history, goals & design
-- [~] Hello example - what happens under the hood?
-- [~] Fragments & HTMX example
-- [~] Qute.next?
+- [~] What happens under the hood...
+- [~] Qute.NEXT?
 
 ---
 
@@ -33,7 +33,7 @@ Riviera DEV 2025
 
 ![GitHub repo link](deck-assets/qr.png)
 
-<span class="demo" style="font-size:1.1em;">👀 EXAMPLE</span> ➵ https://github.com/mkouba/rivieradev2025
+<span class="demo" style="font-size:1.1em;">👀</span> >>> https://github.com/mkouba/rivieradev2025
 
 ---
 
@@ -43,9 +43,10 @@ Riviera DEV 2025
 
 ### What is Qute?
 
-- **QU**arkus **TE**mplating
-- Quarkus core extension
-- Introduced in Quarkus [1.1.0.CR1](https://github.com/quarkusio/quarkus/pull/5793), ~ 6 years ago
+- [~] **QU**arkus **TE**mplating
+- [~] Quarkus core extension
+- [~] Introduced in Quarkus [1.1.0.CR1](https://github.com/quarkusio/quarkus/pull/5793), ~ 6 years ago
+- [~] 37 open issues, 328 closed issues
 
 ---
 
@@ -56,19 +57,11 @@ Riviera DEV 2025
 
 ---
 
-### What's the adoption of Qute?
-
-- [~] We don't know the exact numbers,
-- [~] but we fixed a number of bugs and implemented a bunch of feature requests!
-- [~] 37 open issues, 328 closed issues
-
----
-
 ### Original high-level goals
 
 - [~] Simple syntax with minimal logic
 - [~] Extensibility
-- [~] Build-time validations (Optional)
+- [~] Build-time validations
 - [~] Friendly to [Quarkus Reactive Architecture](https://quarkus.io/guides/quarkus-reactive-architecture)
 - [~] Friendly to native images
 - [~] Decent performance
@@ -88,35 +81,43 @@ You don't want to fall into the trap of benchmark-driven development.
 ### What went wrong? #1
 
 - Simple syntax with minimal logic
-- [~] <span class="red">*Too many users requested more powerful syntax with more complex logic*</span>
+- [~] <span class="red">Too many feature requests for more powerful syntax with more complex logic</span>
 
 ---
 
 ### What went wrong? #2
 
 - Extensibility
-- [~] <span class="red">*Extensibility is essential but it often goes against performance optimizations*</span>
+- [~] <span class="red">Extensibility is essential but it often goes against performance optimizations</span>
 
 ---
 
 ### What went wrong? #3
 
-- Build-time validations (Optional)
-- [~] <span class="red">*Build-time validations = killer feature, but they're hard to implement and not always 100%*</span>
+- Build-time validations
+- [~] <span class="red">Build-time validations = killer feature, but they're hard to implement and not always 100%</span>
+- [~] We made them optional
 
 ---
 
 ### What went wrong? #4
 
 - Friendly to [Quarkus Reactive Architecture](https://quarkus.io/guides/quarkus-reactive-architecture)
-- [~] <span class="red">*Reactive means more complex code and sometimes goes against decent performance*</span>
+- [~] <span class="red">Reactive means more complex code and sometimes goes against decent performance</span>
 
 ---
 
 ### What went wrong? #5
 
 - Friendly to native images
-- [~] <span class="red">*We had to add a reflection fallback that breaks native images.*</span>
+- [~] <span class="red">We had to add a reflection fallback that breaks native images</span>
+
+---
+
+### What went well?
+
+- We have decent performance
+- Quarkus integration is nice
 
 ---
 
@@ -133,7 +134,7 @@ You don't want to fall into the trap of benchmark-driven development.
 ---
 
 
-### Template hello.html <span class="demo">👀 EXAMPLE</span>
+### Template hello.html <span class="demo">👀</span>
 
 ```html[1: 1-16|7|9-11|14]
 <html>
@@ -145,7 +146,7 @@ You don't want to fall into the trap of benchmark-driven development.
    <p>Hello {name ?: "Jean"}!</p>
    <ul>
    {#for header in headers.sorted.reversed}
-      <li>{header}</li>
+      <li>{header.toLowerCase}</li>
    {/for}
    </ul>
    <hr>
@@ -156,7 +157,7 @@ You don't want to fall into the trap of benchmark-driven development.
 
 ---
 
-### JAX-RS resource <span class="demo">👀 EXAMPLE</span>
+### JAX-RS resource <span class="demo">👀</span>
 
 ```java[1: 1-15|4-5|9-13]
 @Path("/hello")
@@ -175,20 +176,11 @@ public class HelloResource {
     }
 }
 ```
-
 ---
 
 ### Implied template parameters
 
-- A type-safe template definition implies template parameter declarations:
-  - `name` to `java.lang.String`
-  - `headers` to `java.util.List<String>`
-
----
-
-### Effective template
-
-```html[1: 1-17|1-2]
+```html[1: 1-17|1-2|10-12]
 {@String name}
 {@java.util.List<String> headers}
 <html>
@@ -210,25 +202,22 @@ public class HelloResource {
 
 ---
 
-### What happens during the build?
+### Build time
 
-- [~] Parse, analyze and validate all known templates
-- [~] Generate optimized bytecode
-
----
-
-### Build - analysis
-
-- find all Qute constructs in the template
-  - `{name ?: "Jean"}`
-  - `{#for header in headers.sorted.reversed}`
-  - `{header.toLowerCase}`
-  - `{/for}` (validation not needed)
-  - `{cdi:system.upTime.seconds}`
+1. [~] Parse and analyze all known templates
+2. [~] Validate the templates
+3. [~] Generate optimized bytecode
 
 ---
 
-### Build validation - `headers.sorted` <span class="demo">👀 EXAMPLE</span>
+### Analysis
+
+- Find all Qute constructs in the template
+- E.g. `{name ?: "Jean"}`, `{#for header in headers.sorted.reversed}`, `{header.toLowerCase}`, `{/for}`, `{cdi:system.upTime.seconds}`
+
+---
+
+### Validation - `headers.sorted` <span class="demo">👀</span>
 
 - [~] Is there `sorted` on `List` ? 
 - [~] Wait, there is no `sorted` on `List`!
@@ -244,7 +233,7 @@ public class HelloResource {
 
 ---
 
-### Build validation - `headers.sorted.reversed` <span class="demo">👀 EXAMPLE</span>
+### Validation - `headers.sorted.reversed` <span class="demo">👀</span>
 
 - [~] Is there `reversed` on `List`? 
 - [~] Wait, there is no `reversed` on `List`!
@@ -265,26 +254,26 @@ public class HelloResource {
    ```
 ---
 
-### Build validation - `header.toLowerCase`
+### Validation - `header.toLowerCase`
 
 - [~] Is there `toLowerCase` on `String`? 
 - [~] ✅ It's there!
 - [~] NOTE: `String` was derived from the previous validations of `headers.sorted.reversed`
 ---
 
-### Build validation - `cdi:system`
+### Validation - `cdi:system`
 
 - [~] Is there a CDI bean with the name `system`? 
 - [~] ✅ It's there!
 ---
 
-### Build validation - `cdi:system.upTime`
+### Validation - `cdi:system.upTime`
 
 - [~] Is there `upTime` on `org.acme.System`? 
 - [~] ✅ `upTime()` is there so we're fine!
 ---
 
-### Build validation - `cdi:system.upTime.seconds`
+### Validation - `cdi:system.upTime.seconds`
 
 - [~] Is there `seconds` on `java.time.Duration`? 
 - [~] ✅ `getSeconds()` is there so we're fine!
@@ -304,12 +293,6 @@ public class HelloResource {
 
 ---
 
-### How does it look like?
-
-Let's see...
-
----
-
 ### What happens at runtime
 
 - [~] Engine is initialized and configured
@@ -318,11 +301,26 @@ Let's see...
 
 ---
 
-### Part - Template fragments & HTMX example
+### How does it look like?
+
+Let's see some code...
 
 ---
 
-### Template systemInfo.html <span class="demo">👀 EXAMPLE</span>
+### Example 2 - fragments & HTMX 
+
+---
+
+### Technology used
+
+- Qute fragments
+- [HTMX](https://htmx.org/) library
+- `quarkus-web-bundler`
+- `quarkus-qute-web`
+
+---
+
+### Template systemInfo.html <span class="demo">👀</span>
 
 ```html[1: 1-16|4|9-10|11-13]
 <html>
@@ -358,6 +356,7 @@ Let's see...
 
 - [~] Improve the parser
 - [~] Extend the syntax
+- [~] Increase the number of contributors
 
 ---
 
@@ -368,5 +367,3 @@ Let's see...
 https://github.com/mkouba/rivieradev2025
 
 Thank you!
-
----

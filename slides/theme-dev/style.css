@@ -13,11 +13,16 @@
 }
 
 .reveal code {
-   background-color: rgb(13, 17, 23);
+   background-color: none;
    border-radius: 6px;
-   color: silver;
+   color: #943000;
    padding: 6px;
-   font-size: 0.6em;
+   font-size: 0.8em;
+}
+
+.reveal code.hljs {
+  background-color: rgb(13, 17, 23);
+  color: white;
 }
 
 .reveal ul ul {
@@ -36,14 +41,16 @@
 
 span.red {
    color: red;
+   text-transform: uppercase;
+   font-style: italic;
 }
 
 span.demo {
   background-color: #d33682;
   color: white;
-  font-size: 0.3em;
-  padding: 3px;
-  border-radius: 4px;
+  font-size: 0.5em;
+  padding: 10px;
+  border-radius: 20px;
 }
 
 /*!

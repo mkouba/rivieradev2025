@@ -9,7 +9,7 @@
    <p>Hello {name ?: "Jean"}!</p>
    <ul>
    {#for header in headers.sorted.reversed}
-      <li>{header}</li>
+      <li>{header.toLowerCase}</li>
    {/for}
    </ul>
    <hr>
