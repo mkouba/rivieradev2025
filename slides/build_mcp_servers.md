@@ -14,9 +14,10 @@ Riviera DEV 2025
 
 ### Who is Martin?
 
-- [~] Introvert and fan of open source
-- [~] Software engineer at Ret Hat/IBM
-- [~] Quarkus MCP server contributor/maintainer
+- Introvert
+- Fan of open source
+- Software engineer at Ret Hat/IBM
+- Quarkus MCP server contributor/maintainer
 
 ---
 
@@ -26,7 +27,7 @@ Riviera DEV 2025
 - [~] Quarkus MCP server: history, goals & design
 - [~] What does the API look like?
 - [~] Advanced features
-- [~] Quarkus MCP.Next?
+- [~] Quarkus MCP.NEXT?
 
 ---
 
@@ -34,7 +35,7 @@ Riviera DEV 2025
 
 ![GitHub repo link](deck-assets/qr.png)
 
-<span class="demo" style="font-size:1.1em;">👀 EXAMPLE</span> ➵ https://github.com/mkouba/rivieradev2025
+<span class="demo" style="font-size:1.1em;">👀</span> ➵ https://github.com/mkouba/rivieradev2025
 
 ---
 
@@ -52,7 +53,7 @@ Riviera DEV 2025
 
 ---
 
-### MCP spec - missing pieces
+### MCP missing pieces
 
 - [~] Not backed by a foundation
 - [~] No clear development/review process
@@ -108,9 +109,16 @@ Riviera DEV 2025
 
 ### Goals
 
-- [~] Unified declarative and programmatic API...
-- [~] ...to implement MCP server features (tools, prompts and resources)...
-- [~] ...independent of the selected transport.
+1. [~] Unified declarative and programmatic API to implement MCP server features (tools, prompts and resources) independent of the selected transport
+2. [~] Quarkus-idiomatic
+
+---
+
+### Design
+
+- [~] Leverage the CDI programming model
+- [~] Declarative API: annotate business methods of CDI beans
+- [~] Programmatic API: `@Inject` a manager bean and use a fluent API to register a feature
 
 ---
 
@@ -123,19 +131,12 @@ Riviera DEV 2025
 
 ---
 
-### Design
-
-- [~] Leverage the CDI programming model
-- [~] Declarative API: annotate business methods of CDI beans
-- [~] Programmatic API: `@Inject` a manager bean and use a fluent API to register a feature
-
----
 
 ### Part 3 - Quarkus MCP server API
 
 ---
 
-### Declarative API in action <span class="demo">👀 EXAMPLE</span>
+### Declarative API in action <span class="demo">👀</span>
 
 ```java[1: 1-15|6-8|9-11|12-15]
 import io.quarkiverse.mcp.server.Tool;
@@ -230,7 +231,7 @@ public class Tools {
 ---
 
 
-### Traffic logging <span class="demo">👀 EXAMPLE</span>
+### Traffic logging <span class="demo">👀</span>
 
 - Transport-agnostic
 - Log all JSON messages sent/received
@@ -242,13 +243,13 @@ quarkus.mcp.server.traffic-logging.text-limit=1500
 
 ---
 
-### Dev UI <span class="demo">👀 EXAMPLE</span>
+### Dev UI <span class="demo">👀</span>
 
 ![MCP Dev UI](deck-assets/mcp-devui.png)
 
 ---
 
-### Client logging <span class="demo">👀 EXAMPLE</span>
+### Client logging <span class="demo">👀</span>
 
 ```java[1: 1-15|8-10]
 public class Tools {
@@ -320,7 +321,7 @@ public class SamplingCheck implements InitialCheck {
 
 ---
 
-### Progress API <span class="demo">👀 EXAMPLE</span>
+### Progress API <span class="demo">👀</span>
 
 ```java[1: 1-34|8-12|13-17|28|30-31]
 import io.quarkiverse.mcp.server.Progress;
@@ -362,7 +363,7 @@ public class LongRunningTools {
 
 ---
 
-### Sampling <span class="demo">👀 EXAMPLE</span>
+### Sampling <span class="demo">👀</span>
 
 ```java[1: 1-17|6|7-16|18]
 import io.quarkiverse.mcp.server.Sampling;
@@ -390,7 +391,7 @@ public class Tools {
 
 ---
 
-### Testing! <span class="demo">👀 EXAMPLE</span>
+### Testing! <span class="demo">👀</span>
 
 ```java[1: 1-22|9-13|15-19|15-24]
 @QuarkusTest

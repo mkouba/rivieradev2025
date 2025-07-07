@@ -1,9 +1,7 @@
 package org.acme;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 import org.jboss.resteasy.reactive.RestQuery;
 
@@ -38,16 +36,4 @@ public class HelloResource {
         return sorted;
     }
 
-    @TemplateExtension
-    static <T> Iterator<T> reversed(List<T> list) {
-        ListIterator<T> it = list.listIterator(list.size());
-        return new Iterator<T>() {
-            public boolean hasNext() {
-                return it.hasPrevious();
-            }
-            public T next() {
-                return it.previous();
-            }
-        };
-    }
 }

@@ -14,10 +14,10 @@ Riviera DEV 2025
 
 ### Who is Martin?
 
-- [~] Introvert
-- [~] Fan of open source
-- [~] Software engineer at Ret Hat/IBM
-- [~] Quarkus Qute contributor/maintainer
+- Introvert
+- Fan of open source
+- Software engineer at Ret Hat/IBM
+- Quarkus Qute contributor/maintainer
 
 ---
 
@@ -126,9 +126,9 @@ You don't want to fall into the trap of benchmark-driven development.
 ---
 
 
-### What happens under the hood?
+### So what happens under the hood?
 
-1. **BUILD** - analyse, validate, generate
+1. **BUILD** - parse, analyse, validate, generate
 2. **RUNTIME** - initialize, parse, watch
 
 ---
@@ -217,11 +217,28 @@ public class HelloResource {
 
 ---
 
+### Validation - `{name ?: "Jean"}` <span class="demo">👀</span>
+
+- [~] Translates to `name.or("Jean")`
+- [~] Is there `name` available in the template data map?
+- [~] ✅ It's there!
+- [~] ✅ `or()` is a built-in virtual method availabe for any type
+
+---
+
+### Validation - `{#for header in headers.sorted.reversed}` <span class="demo">👀</span>
+
+- [~] Is there `headers` available in the template data map?
+- [~] ✅ It's there!
+
+---
+
 ### Validation - `headers.sorted` <span class="demo">👀</span>
 
+- [~] `headers` maps to `List<String>`
 - [~] Is there `sorted` on `List` ? 
 - [~] Wait, there is no `sorted` on `List`!
-- [~] ✅ You're right, `headers.sorted` is handled by the template extension method:
+- [~] ✅ You're right, `sorted` is handled by the template extension method:
    ```java
     @TemplateExtension
     static List<String> sorted(List<String> list) {
@@ -235,30 +252,18 @@ public class HelloResource {
 
 ### Validation - `headers.sorted.reversed` <span class="demo">👀</span>
 
-- [~] Is there `reversed` on `List`? 
-- [~] Wait, there is no `reversed` on `List`!
-- [~] ✅ You're right again, `sorted.reversed` is handled by the template extension method:
-   ```java
-    @TemplateExtension
-    static <T> Iterator<T> reversed(List<T> list) {
-        ListIterator<T> it = list.listIterator(list.size());
-        return new Iterator<T>() {
-            public boolean hasNext() {
-                return it.hasPrevious();
-            }
-            public T next() {
-                return it.previous();
-            }
-        };
-    }
-   ```
+- [~] `headers.sorted` maps to `List<String>`
+- [~] ✅ It's there! (since JDK 21!)
+- [~] NOTE: `List<String>` was derived from the previous steps of validation
+
 ---
 
 ### Validation - `header.toLowerCase`
 
+- [~] `header` maps to `String` (the type is derived from the previous validations of `headers.sorted.reversed`)
 - [~] Is there `toLowerCase` on `String`? 
 - [~] ✅ It's there!
-- [~] NOTE: `String` was derived from the previous validations of `headers.sorted.reversed`
+
 ---
 
 ### Validation - `cdi:system`
@@ -269,7 +274,8 @@ public class HelloResource {
 
 ### Validation - `cdi:system.upTime`
 
-- [~] Is there `upTime` on `org.acme.System`? 
+- [~] `cdi:system` maps to `org.acme.System`
+- [~] Is there `upTime` on `System`? 
 - [~] ✅ `upTime()` is there so we're fine!
 ---
 
