@@ -116,8 +116,8 @@ You don't want to fall into the trap of benchmark-driven development.
 
 ### What went well?
 
-- We have decent performance
-- Quarkus integration is nice
+- ✅ We have decent performance
+- ✅ Quarkus integration is well done
 
 ---
 
@@ -134,8 +134,9 @@ You don't want to fall into the trap of benchmark-driven development.
 ---
 
 
-### Template hello.html <span class="demo">👀</span>
+### A simple template <span class="demo">👀</span>
 
+hello.html
 ```html[1: 1-16|7|9-11|14]
 <html>
 <head>
@@ -220,7 +221,7 @@ public class HelloResource {
 ### Validation - `{name ?: "Jean"}` <span class="demo">👀</span>
 
 - [~] Translates to `name.or("Jean")`
-- [~] Is there `name` available in the template data map?
+- [~] Is there a type mapping for `name` available?
 - [~] ✅ It's there!
 - [~] ✅ `or()` is a built-in virtual method availabe for any type
 
@@ -228,7 +229,7 @@ public class HelloResource {
 
 ### Validation - `{#for header in headers.sorted.reversed}` <span class="demo">👀</span>
 
-- [~] Is there `headers` available in the template data map?
+- [~] Is there a type mapping for `headers` available?
 - [~] ✅ It's there!
 
 ---
@@ -266,7 +267,7 @@ public class HelloResource {
 
 ---
 
-### Validation - `cdi:system`
+### Validation - `{cdi:system.upTime.seconds}`
 
 - [~] Is there a CDI bean with the name `system`? 
 - [~] ✅ It's there!
@@ -326,8 +327,9 @@ Let's see some code...
 
 ---
 
-### Template systemInfo.html <span class="demo">👀</span>
+### Template  <span class="demo">👀</span>
 
+systemInfo.html
 ```html[1: 1-16|4|9-10|11-13]
 <html>
 <head>
@@ -352,13 +354,13 @@ Let's see some code...
 
 ### Also powered by Qute...
 
-- [~] Quarkus mailer extension
-- [~] Renarde
-- [~] Roq
+- [~] [Quarkus mailer extension](https://quarkus.io/guides/mailer-reference#templates)
+- [~] [Renarde](https://github.com/quarkiverse/quarkus-renarde)
+- [~] [Roq](https://github.com/quarkiverse/quarkus-roq)
 
 ---
 
-### Part - Qute.NEXT
+### Part 3 - Qute.NEXT
 
 - [~] Improve the parser
 - [~] Extend the syntax

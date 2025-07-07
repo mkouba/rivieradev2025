@@ -7,9 +7,9 @@
 }
 
 .reveal h2, .reveal h3 {
-   text-transform: none;
    font-family: "Open Sans", Arial, sans-serif;
    font-weight: bold;
+   font-style: italic;
 }
 
 .reveal code {
@@ -51,6 +51,7 @@ span.demo {
   font-size: 0.5em;
   padding: 10px;
   border-radius: 20px;
+  font-style: normal;
 }
 
 /*!
