@@ -90,7 +90,7 @@ Riviera DEV 2025
 
 ### MCP summary
 
-[~] ➵➵➵➵➵ Wild West
+[~] ➵ ➵ ➵ ➵ ➵ 🤠 Wild West
 
 ---
 
@@ -321,6 +321,40 @@ public class SamplingCheck implements InitialCheck {
 
 ---
 
+### Testing! <span class="demo">👀</span>
+
+```java[1: 1-22|9-13|15-19|15-24]
+@QuarkusTest
+public class ToolsAnswerTest {
+
+    @TestHTTPResource
+    URI testUri;
+
+    @Test
+    public void testAnswer() {
+        McpStremableTestClient client = McpAssured
+                .newStreamableClient()
+                .setBaseUri(testUri)
+                .build()
+                .connect();
+
+        client.when()
+                .toolsCall("theAnswer", Map.of("lang", "Java"), r -> {
+                    assertEquals("Spaces are better for indentation.", 
+                       r.content().get(0).asText().text());
+                })
+                .toolsCall("theAnswer", Map.of("lang", "python"), r -> {
+                    assertEquals("Tabs are better for indentation.", 
+                       r.content().get(0).asText().text());
+                })
+                .thenAssertResults();
+    }
+
+}
+```
+
+---
+
 ### Progress API <span class="demo">👀</span>
 
 ```java[1: 1-34|8-12|13-17|28|30-31]
@@ -391,43 +425,10 @@ public class Tools {
 
 ---
 
-### Testing! <span class="demo">👀</span>
-
-```java[1: 1-22|9-13|15-19|15-24]
-@QuarkusTest
-public class ToolsAnswerTest {
-
-    @TestHTTPResource
-    URI testUri;
-
-    @Test
-    public void testAnswer() {
-        McpStremableTestClient client = McpAssured
-                .newStreamableClient()
-                .setBaseUri(testUri)
-                .build()
-                .connect();
-
-        client.when()
-                .toolsCall("theAnswer", Map.of("lang", "Java"), r -> {
-                    assertEquals("Spaces are better for indentation.", 
-                       r.content().get(0).asText().text());
-                })
-                .toolsCall("theAnswer", Map.of("lang", "python"), r -> {
-                    assertEquals("Tabs are better for indentation.", 
-                       r.content().get(0).asText().text());
-                })
-                .thenAssertResults();
-    }
-
-}
-```
-
----
 
 ### Part 5 - Quarkus MCP.Next
 
-- [~] ~~Improve the testing story~~
+- [~] Improve the testing story
 - [~] WebSocket transport
 - [~] Security
 
